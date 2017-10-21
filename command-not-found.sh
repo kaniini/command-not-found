@@ -1,0 +1,41 @@
+#!/bin/sh
+# command-not-found: display useful package suggestions when a command is not found
+#
+# Copyright (c) 2017 William Pitcock <nenolod@dereferenced.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+results=$(apk search -v "command:$1")
+results_cnt=$(printf "%s" "$results" | wc -c)
+
+if [ $results_cnt -gt 0 ]; then
+	printf "The program '%s' may be found in these packages:\n" "$1" 1>&2
+	printf "%s\n" "$results" | while read line
+	do
+		atom=$(echo $line | cut -d' ' -f1 | sed -r 's:(.*)-\d.*-r\d:\1:p' | head -n 1)
+		desc=$(echo $line | cut -d' ' -f3-)
+		printf " * %s: %s\n" "$atom" "$desc" 1>&2
+	done
+	printf "To install packages: 'apk add <selected package>'\n" 1>&2
+else
+	printf "%s: not found\n" "$1" 1>&2
+fi
+
+# POSIX EX_NOTFOUND exit code
+exit 127
