@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-results=$(apk search -v "command:$1")
+results=$(apk search -v "cmd:$1")
 results_cnt=$(printf "%s" "$results" | wc -c)
 
 if [ $results_cnt -gt 0 ]; then
