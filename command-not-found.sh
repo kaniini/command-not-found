@@ -22,9 +22,8 @@
 # SOFTWARE.
 
 results=$(apk search -v "cmd:$1")
-results_cnt=$(printf "%s" "$results" | wc -c)
 
-if [ $results_cnt -gt 0 ]; then
+if [ "$results" ]; then
 	printf "The program '%s' may be found in these packages:\n" "$1" 1>&2
 	printf "%s\n" "$results" | while read atom _ desc
 	do
