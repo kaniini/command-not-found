@@ -26,10 +26,9 @@ results_cnt=$(printf "%s" "$results" | wc -c)
 
 if [ $results_cnt -gt 0 ]; then
 	printf "The program '%s' may be found in these packages:\n" "$1" 1>&2
-	printf "%s\n" "$results" | while read line
+	printf "%s\n" "$results" | while read atom _ desc
 	do
-		atom=$(echo $line | cut -d' ' -f1 | sed -r 's:(.*)-\d.*-r\d:\1:p' | head -n 1)
-		desc=$(echo $line | cut -d' ' -f3-)
+		atom=${atom%-*}; atom=${atom%-*}  # remove version
 		printf " * %s: %s\n" "$atom" "$desc" 1>&2
 	done
 	printf "To install packages: 'apk add <selected package>'\n" 1>&2
