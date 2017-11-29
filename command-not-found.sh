@@ -24,15 +24,15 @@
 results=$(apk search -xv "cmd:$1" 2>/dev/null)
 
 if [ "$results" ]; then
-	printf "The program '%s' may be found in these packages:\n" "$1" 1>&2
+	printf "The program '%s' may be found in these packages:\n" "$1" >&2
 	printf "%s\n" "$results" | while read atom _ desc
 	do
 		atom=${atom%-*}; atom=${atom%-*}  # remove version
-		printf " * %s: %s\n" "$atom" "$desc" 1>&2
+		printf " * %s: %s\n" "$atom" "$desc" >&2
 	done
-	printf "To install packages: 'apk add <selected package>'\n" 1>&2
+	printf "To install packages: 'apk add <selected package>'\n" >&2
 else
-	printf "%s: not found\n" "$1" 1>&2
+	printf "%s: not found\n" "$1" >&2
 fi
 
 # POSIX EX_NOTFOUND exit code
