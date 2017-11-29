@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-results=$(apk search -v "cmd:$1")
+results=$(apk search -v "cmd:$1" 2>/dev/null)
 
 if [ "$results" ]; then
 	printf "The program '%s' may be found in these packages:\n" "$1" 1>&2
